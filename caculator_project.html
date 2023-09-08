@@ -1,0 +1,166 @@
+<html>
+<head>
+<style type="text/css">
+:root{
+--60_color:white;/*#EA445A*/
+--30_color:white;/*#74F0ED*/
+--10_color:#0000007c;
+}
+#calculator{
+    box-shadow: 2px 2px 2px 3px rgba(0, 0, 0, 0.3);
+border-radius:10px;
+}
+div{
+background-color:var(--30_color);
+width:min-content;
+
+}
+#root{
+background-color:var(--60_color);
+height:max-content;
+width:min-content;
+display:grid;
+grid-template-columns:repeat(4,25%);
+border-radius:0px 0px 10px 10px;
+}
+#root div{
+
+color:var(--10_color);
+margin:20px;
+border-radius:5px;
+padding:10px;
+cursor: pointer;
+box-shadow:2px 2px 2px 3px rgba(0, 0, 0, 0.079);
+transition-duration: 0.15s;
+
+}
+#root div:hover{
+transform:scale(1.3);
+transition-duration: 0.15s;
+background-color:rgb(255, 176, 28);
+box-shadow:none;
+
+
+}
+input{
+    background-color:var(--30_color);
+    color:black;
+width:100%;
+height:100px;
+overflow:scroll;
+padding:10px;
+padding-left:20px;
+border-radius:10px 10px 0px 0px;
+border:none;
+outline:none;
+font-size:25px;
+
+
+
+
+}
+</style>
+</head>
+<body>
+<div id="calculator">
+<input type="text" id="inp" dir="ltr"  >
+<div id="root"> </div>
+
+</div>
+<script type="text/javascript">
+let root= document.getElementById("root");
+let inp= document.getElementById("inp");
+let x=[1,2,3,'+',4,5,6,'-',7,8,9,'*',0,'/','=','C',"AC","."];
+let count=0;
+let value2="";
+let operation =[""];
+for (let i=0;i<x.length;i++){
+root.innerHTML +=`
+<div onclick="put(this.innerHTML)">${x[i]}</div>
+`;
+
+}
+function put(a){
+if (a != '=' && a !="AC" && a!="C"){
+inp.value+=a;
+
+} 
+else if(a == "AC"){ 
+    inp.value = null;
+}
+else if(a == 'C'){ 
+    for(let i=0;i<(inp.value.length)-1;i++){
+value2 += inp.value[i];
+//console.log(inp.value.length-1);
+   // }
+}
+inp.value=value2;
+value2="";
+//inp.value=inp.value.splice(inp.value.length-1,1);
+//console.log(inp.value.splice(inp.value.length-1,1))
+}
+else{
+equal();
+
+}
+}
+function equal (){
+for (let i=0;i<inp.value.length;i++){
+//operation[count] += inp.value[i];
+//document.write(operation);
+//document.write(typeof inp.value[i] != number);
+if((inp.value[i] =="*" ||inp.value[i] =="-" ||inp.value[i] =="/" ||inp.value[i] =="+")&&i!=0){
+//console.log(count);
+    count++;
+operation[count]=inp.value[i];
+count++;
+operation[count]="";
+}
+else{
+operation[count] += inp.value[i];
+}
+}
+console.log(operation);
+console.log(operation.length)
+//here start
+for (let i=0;i<operation.length-1;i++){
+console.log("i=",i)
+    if (operation[i]=='*'){
+operation[i-1]=+operation[i-1]* +operation[i+1];
+operation.splice(i,2);
+
+//console.log("gloglo");
+//problem :
+//documenet.write(opeartion);
+i=0;
+}
+if (operation[i]=='/'){
+operation[i-1]=+operation[i-1]/ +operation[i+1];
+operation.splice(i,2);
+i=0;
+}
+
+}
+for (let i=0;i<operation.length-1;i++){
+if (operation[i]=='+'){
+operation[i-1]= +operation[i-1]+ +operation[i+1];
+operation.splice(i,2);
+i=0;
+}
+if (operation[i]=='-'){
+operation[i-1]=+operation[i-1]- +operation[i+1];
+operation.splice(i,2);
+i=0;
+}
+}
+//inp.value = operation[0];
+//here
+//here end
+inp.value= JSON.stringify(operation[0]);
+operation[0]="";
+count=0;
+
+}
+</script>
+</body>
+</html>
